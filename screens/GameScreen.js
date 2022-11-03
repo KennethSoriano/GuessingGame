@@ -12,7 +12,7 @@ function GameScreen() {
             </View>
           
         </View>
-    )
+    );
 }
 
 export default GameScreen;
