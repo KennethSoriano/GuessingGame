@@ -1,6 +1,12 @@
-import {  View, StyleSheet, Alert, useWindowDimensions, FlatList } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Alert,
+  useWindowDimensions,
+  FlatList,
+} from "react-native";
 import { useState, useEffect } from "react";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 import Title from "../components/ui/Title";
 import NumberContainer from "../components/game/NumberContainer";
 import PrimaryButton from "../components/ui/PrimaryButton";
@@ -25,38 +31,42 @@ function GameScreen({ userNumber, onGameOver }) {
   const initialGuess = generateRandomBetween(1, 100, userNumber);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
   const [guessRounds, setGuessRounds] = useState([initialGuess]);
-  const { width, height} = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
 
   useEffect(() => {
-    if (currentGuess === userNumber){
-        onGameOver(guessRounds.length);
+    if (currentGuess === userNumber) {
+      onGameOver(guessRounds.length);
     }
   }, [currentGuess, userNumber, onGameOver]);
 
   useEffect(() => {
     minBoundary = 1;
     maxBoundary = 100;
-  },[])
+  }, []);
 
   function nextGuessHandler(direction) {
     if (
-        (direction === 'lower' && currentGuess < userNumber) ||
-        (direction === 'greater' && currentGuess > userNumber)
+      (direction === "lower" && currentGuess < userNumber) ||
+      (direction === "greater" && currentGuess > userNumber)
     ) {
-        Alert.alert('Dont lie!', 'You know this is wrong...', [
-            { text: 'Sorry!', style: 'cancel'},
-        ]);
-        return;
+      Alert.alert("Dont lie!", "You know this is wrong...", [
+        { text: "Sorry!", style: "cancel" },
+      ]);
+      return;
     }
 
-    if (direction === 'lower') {
-        maxBoundary = currentGuess;
+    if (direction === "lower") {
+      maxBoundary = currentGuess;
     } else {
-        minBoundary = currentGuess + 1;
+      minBoundary = currentGuess + 1;
     }
-    const newRndNumber = generateRandomBetween(minBoundary, maxBoundary, currentGuess);
+    const newRndNumber = generateRandomBetween(
+      minBoundary,
+      maxBoundary,
+      currentGuess
+    );
     setCurrentGuess(newRndNumber);
-    setGuessRounds(prevGuessRounds => [newRndNumber, ...prevGuessRounds]);
+    setGuessRounds((prevGuessRounds) => [newRndNumber, ...prevGuessRounds]);
   }
 
   const guessRoundsListLength = guessRounds.length;
@@ -65,19 +75,21 @@ function GameScreen({ userNumber, onGameOver }) {
     <>
       <NumberContainer>{currentGuess}</NumberContainer>
       <Card>
-        <InstructionText style={styles.instructionText}>Higher or Lower?</InstructionText>
+        <InstructionText style={styles.instructionText}>
+          Higher or Lower?
+        </InstructionText>
         <View style={styles.buttonsContainer}>
-            <View style={styles.buttonContainer}>
-                <PrimaryButton onPress={nextGuessHandler.bind(this, 'greater')}>
-                    <Ionicons name='md-remove' size={24} color='white' />
-                </PrimaryButton>
-            </View>
-            <View style={styles.buttonContainer}>
-                <PrimaryButton onPress={nextGuessHandler.bind(this, 'lower')}>
-                    <Ionicons name='md-add' size={24} color='white' />
-                </PrimaryButton>
-            </View>
-        </View>   
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={nextGuessHandler.bind(this, "greater")}>
+              <Ionicons name="md-remove" size={24} color="white" />
+            </PrimaryButton>
+          </View>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={nextGuessHandler.bind(this, "lower")}>
+              <Ionicons name="md-add" size={24} color="white" />
+            </PrimaryButton>
+          </View>
+        </View>
       </Card>
     </>
   );
@@ -87,14 +99,14 @@ function GameScreen({ userNumber, onGameOver }) {
       <>
         <View style={styles.buttonsContainerWide}>
           <View style={styles.buttonContainer}>
-            <PrimaryButton onPress={nextGuessHandler.bind(this, 'greater')}>
-                <Ionicons name='md-remove' size={24} color='white' />
+            <PrimaryButton onPress={nextGuessHandler.bind(this, "greater")}>
+              <Ionicons name="md-remove" size={24} color="white" />
             </PrimaryButton>
           </View>
           <NumberContainer>{currentGuess}</NumberContainer>
           <View style={styles.buttonContainer}>
-            <PrimaryButton onPress={nextGuessHandler.bind(this, 'lower')}>
-                <Ionicons name='md-add' size={24} color='white' />
+            <PrimaryButton onPress={nextGuessHandler.bind(this, "lower")}>
+              <Ionicons name="md-add" size={24} color="white" />
             </PrimaryButton>
           </View>
         </View>
@@ -107,9 +119,14 @@ function GameScreen({ userNumber, onGameOver }) {
       <Title>Opponent's Guess</Title>
       {content}
       <View style={styles.listContainer}>
-        <FlatList 
-          data={guessRounds} 
-          renderItem={(itemData) => <GuessLogItem roundNumber={guessRoundsListLength - itemData.index} guess={itemData.item} />} 
+        <FlatList
+          data={guessRounds}
+          renderItem={(itemData) => (
+            <GuessLogItem
+              roundNumber={guessRoundsListLength - itemData.index}
+              guess={itemData.item}
+            />
+          )}
           keyExtractor={(item) => item}
         />
       </View>
@@ -120,26 +137,26 @@ function GameScreen({ userNumber, onGameOver }) {
 export default GameScreen;
 
 const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        padding: 24,
-        alignItems: 'center'
-    },
-    instructionText: {
-        marginBottom: 12
-    },
-    buttonsContainer: {
-        flexDirection: "row",
-    },
-    buttonContainer: {
-        flex: 1,
-    },
-    buttonsContainerWide: {
-      flexDirection: 'row',
-      alignItems: 'center'
-    },
-    listContainer: {
-      flex: 1,
-      padding: 16
-    }
+  screen: {
+    flex: 1,
+    padding: 24,
+    alignItems: "center",
+  },
+  instructionText: {
+    marginBottom: 12,
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+  },
+  buttonContainer: {
+    flex: 1,
+  },
+  buttonsContainerWide: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  listContainer: {
+    flex: 1,
+    padding: 16,
+  },
 });
